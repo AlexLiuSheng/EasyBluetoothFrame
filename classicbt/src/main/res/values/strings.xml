@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">classicbt</string>
+    <string name="notifyTitle">提示</string>
+    <string name="gpsNotifyMsg">使用蓝牙功能需要定位权限</string>
+    <string name="cancel">取消</string>
+    <string name="setting">设置</string>
+</resources>
