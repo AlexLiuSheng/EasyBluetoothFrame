@@ -23,7 +23,7 @@ import com.allenliu.classicbt.listener.BluetoothPermissionCallBack;
  * @copyRight 四川金信石信息技术有限公司
  * @since 1.0
  */
-public abstract class   BaseBluetoothPermissionHandler  {
+public abstract class BluetoothPermissionHandler {
     private static final int REQUEST_CODE_OPEN_GPS = 0x1;
     private static final int REQUEST_CODE_ENABLE_BLUETOOTH = 0x2;
     private static final int REQUEST_BLUETOOTH=0x3;
@@ -32,7 +32,7 @@ public abstract class   BaseBluetoothPermissionHandler  {
 
    private AppCompatActivity context;
 
-    public BaseBluetoothPermissionHandler(AppCompatActivity context,BluetoothPermissionCallBack bluetoothPermissionCallBack) {
+    public BluetoothPermissionHandler(AppCompatActivity context, BluetoothPermissionCallBack bluetoothPermissionCallBack) {
         this.bluetoothPermissionCallBack = bluetoothPermissionCallBack;
         this.context = context;
     }
