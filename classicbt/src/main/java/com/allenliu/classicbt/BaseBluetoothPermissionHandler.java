@@ -14,6 +14,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import com.allenliu.classicbt.listener.BluetoothPermissionCallBack;
 
 /**
  * @author AllenLiu
@@ -22,38 +23,31 @@ import android.support.v7.app.AppCompatActivity;
  * @copyRight 四川金信石信息技术有限公司
  * @since 1.0
  */
-public abstract class BaseBluetoothPermissionActivity extends AppCompatActivity {
+public abstract class   BaseBluetoothPermissionHandler  {
     private static final int REQUEST_CODE_OPEN_GPS = 0x1;
     private static final int REQUEST_CODE_ENABLE_BLUETOOTH = 0x2;
     private static final int REQUEST_BLUETOOTH=0x3;
     private final String[] permissions = new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.BLUETOOTH, Manifest.permission.BLUETOOTH_ADMIN};
+    private BluetoothPermissionCallBack bluetoothPermissionCallBack;
 
-    protected abstract void onBlueToothEnabled();
-   public abstract void permissionFailed();
+   private AppCompatActivity context;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        start();
-
+    public BaseBluetoothPermissionHandler(AppCompatActivity context,BluetoothPermissionCallBack bluetoothPermissionCallBack) {
+        this.bluetoothPermissionCallBack = bluetoothPermissionCallBack;
+        this.context = context;
     }
 
     protected void afterGrantedPermissions() {
         if (BluetoothAdapter.getDefaultAdapter().isEnabled()) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !checkGPSIsOpen()) {
-                new AlertDialog.Builder(this)
+                new AlertDialog.Builder(context)
                         .setTitle(R.string.notifyTitle)
                         .setMessage(R.string.gpsNotifyMsg)
                         .setNegativeButton(R.string.cancel,
                                 new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        finish();
+                                        context.finish();
                                     }
                                 })
                         .setPositiveButton(R.string.setting,
@@ -61,33 +55,34 @@ public abstract class BaseBluetoothPermissionActivity extends AppCompatActivity 
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                                        startActivityForResult(intent, REQUEST_CODE_OPEN_GPS);
+                                        context.startActivityForResult(intent, REQUEST_CODE_OPEN_GPS);
                                     }
                                 })
 
                         .setCancelable(false)
                         .show();
             } else {
-              onBlueToothEnabled();
+                if (bluetoothPermissionCallBack!=null) {
+                    bluetoothPermissionCallBack.onBlueToothEnabled();
+                }
 
             }
         } else {
             Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);//需要BLUETOOTH权限
-            startActivityForResult(intent, REQUEST_CODE_ENABLE_BLUETOOTH);
+            context.startActivityForResult(intent, REQUEST_CODE_ENABLE_BLUETOOTH);
         }
 
 
     }
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+
+    public  void onActivityResult(int requestCode, int resultCode, Intent data){
         if (requestCode == REQUEST_CODE_OPEN_GPS) {
             afterGrantedPermissions();
         }else if(requestCode==REQUEST_CODE_ENABLE_BLUETOOTH){
             afterGrantedPermissions();
         }
     }
-    @Override
+
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
         // If request is cancelled, the result arrays are empty.
@@ -100,7 +95,8 @@ public abstract class BaseBluetoothPermissionActivity extends AppCompatActivity 
             } else {
                 // permission denied, boo! Disable the
                 // functionality that depends on this permission.
-                permissionFailed();
+                if (bluetoothPermissionCallBack!=null)
+                    bluetoothPermissionCallBack.permissionFailed();
             }
 
             // other 'case' lines to check for other
@@ -108,25 +104,25 @@ public abstract class BaseBluetoothPermissionActivity extends AppCompatActivity 
         }
     }
     private boolean checkGPSIsOpen() {
-        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         if (locationManager == null)
             return false;
         return locationManager.isProviderEnabled(android.location.LocationManager.GPS_PROVIDER);
     }
 
-    protected void start(){
+    public void start(){
         checkPermissions(permissions);
     }
 
     private void checkPermissions(String[] permissions) {
         boolean permissionAllGranted=true;
         for (String permission : permissions) {
-            if (ContextCompat.checkSelfPermission(this,permission)!= PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(context,permission)!= PackageManager.PERMISSION_GRANTED) {
                 permissionAllGranted=false;
             }
         }
         if (!permissionAllGranted) {
-            ActivityCompat.requestPermissions(this,permissions,REQUEST_BLUETOOTH);
+            ActivityCompat.requestPermissions(context,permissions,REQUEST_BLUETOOTH);
         }else{
             afterGrantedPermissions();
         }
