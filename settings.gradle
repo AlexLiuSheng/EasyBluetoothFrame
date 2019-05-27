@@ -1,1 +1,1 @@
-include ':app', ':classicbt'
+include  ':classicbt'
