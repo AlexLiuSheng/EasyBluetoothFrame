@@ -4,4 +4,6 @@
     <string name="gpsNotifyMsg">使用蓝牙功能需要定位权限</string>
     <string name="cancel">取消</string>
     <string name="setting">设置</string>
+    <string name="bluetooth_service_is_running">蓝牙传输服务正在运行</string>
+    <string name="bluetooth_service">蓝牙服务</string>
 </resources>

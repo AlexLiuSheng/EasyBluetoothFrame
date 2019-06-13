@@ -1,5 +1,6 @@
 package com.allenliu.classicbt;
 
+import android.app.Notification;
 import android.bluetooth.BluetoothA2dp;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -35,6 +36,8 @@ public class BleManager implements BleFunction {
 
     private BtReceiver mReceiver;
     private String uuid;
+    private Notification notification;
+    private boolean isForegroundService=false;
     private ConnectResultlistner clientConnectResultListener;
     private ConnectResultlistner serverConnectResultListener;
     public static BleManager getInstance() {
@@ -162,7 +165,7 @@ public class BleManager implements BleFunction {
     @Override
     public void connect(BluetoothDevice device, ConnectResultlistner c) {
         this.clientConnectResultListener=c;
-        ConnectService.start(application,  device, ConnectThread.CLIENT, uuid);
+        ConnectService.start(application,  device, ConnectThread.CLIENT, uuid,isForegroundService,notification);
 
 
     }
@@ -223,8 +226,18 @@ public class BleManager implements BleFunction {
     @Override
     public void registerServerConnection(ConnectResultlistner connectResultListener) {
         this.serverConnectResultListener=connectResultListener;
-        ConnectService.start(application,  null, ConnectThread.SERVER, uuid);
+        ConnectService.start(application,  null, ConnectThread.SERVER, uuid,isForegroundService,notification);
 
+    }
+
+    @Override
+    public void setForegroundService(boolean foregroundService) {
+        this.isForegroundService=foregroundService;
+    }
+
+    @Override
+    public void setNotification(Notification notification) {
+        this.notification=notification;
     }
 
 

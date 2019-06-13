@@ -1,5 +1,6 @@
 package com.allenliu.classicbt.listener;
 
+import android.app.Notification;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import com.allenliu.classicbt.scan.ScanConfig;
@@ -35,7 +36,8 @@ public interface BleFunction {
     void setServerConnectResultListener(ConnectResultlistner connectResultListener);
     void registerServerConnection(ConnectResultlistner connectResultListener);
 
-
+    void setForegroundService(boolean foregroundService);
+    void setNotification(Notification notification);
 
 
 }
