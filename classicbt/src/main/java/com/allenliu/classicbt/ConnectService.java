@@ -1,11 +1,14 @@
 package com.allenliu.classicbt;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.Service;
 import android.bluetooth.BluetoothDevice;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
@@ -53,7 +56,15 @@ public class ConnectService extends Service {
     }
 
     private Notification buildNotification() {
-        String channelId="BluetoothForegroundService";
+        String channelId="BluetoothForegroundServiceID";
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel notificationChannel = new NotificationChannel(channelId, "BluetoothForegroundService1", NotificationManager.IMPORTANCE_LOW);
+            notificationChannel.enableLights(false);
+            notificationChannel.setLightColor(Color.RED);
+            notificationChannel.enableVibration(false);
+            NotificationManager manager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+            manager.createNotificationChannel(notificationChannel);
+        }
         return new NotificationCompat.Builder(this,channelId)
                 .setContentTitle(getString(R.string.bluetooth_service))
                 .setTicker(getString(R.string.bluetooth_service_is_running))
