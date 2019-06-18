@@ -38,6 +38,7 @@ public interface BleFunction {
 
     void setForegroundService(boolean foregroundService);
     void setNotification(Notification notification);
+    void enableDiscoverable(long time);
 
 
 }

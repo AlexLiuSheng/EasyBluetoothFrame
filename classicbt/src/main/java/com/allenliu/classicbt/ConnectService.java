@@ -68,6 +68,7 @@ public class ConnectService extends Service {
         return new NotificationCompat.Builder(this,channelId)
                 .setContentTitle(getString(R.string.bluetooth_service))
                 .setTicker(getString(R.string.bluetooth_service_is_running))
+                .setSmallIcon(R.drawable.ic_launcher)
                 .build();
     }
 
@@ -106,5 +107,6 @@ public class ConnectService extends Service {
         }
         if (connectThread != null)
             connectThread.cancel();
+        stopForeground(true);
     }
 }

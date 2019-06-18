@@ -1,36 +1,57 @@
 package com.allenliu.btdemo
 
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.bluetooth.BluetoothDevice
+import android.content.Context
+import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
+import android.support.v4.app.NotificationCompat
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
-import com.allenliu.classicbt.BaseBluetoothPermissionActivity
+
 import com.allenliu.classicbt.BleManager
+import com.allenliu.classicbt.BluetoothPermissionHandler
 import com.allenliu.classicbt.CLog
 import com.allenliu.classicbt.Connect
+import com.allenliu.classicbt.listener.BluetoothPermissionCallBack
 import com.allenliu.classicbt.listener.ConnectResultlistner
 import com.allenliu.classicbt.listener.ScanResultListener
 import com.allenliu.classicbt.listener.TransferProgressListener
 import com.allenliu.classicbt.scan.ScanConfig
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : BaseBluetoothPermissionActivity() {
+class MainActivity : AppCompatActivity(),BluetoothPermissionCallBack {
     private lateinit var list:ArrayList<BluetoothDevice>
     var connect:Connect?=null
+    private val permissionCallBack=BluetoothPermissionHandler(this,this)
     override fun permissionFailed() {
 
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        permissionCallBack.onActivityResult(requestCode, resultCode, data)
+    }
+
+
+  override  fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        permissionCallBack.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         recyclerview.layoutManager=LinearLayoutManager(this)
         list=ArrayList()
         recyclerview.adapter=MyAdapter(this,list)
-
+       permissionCallBack.start()
     }
-
     override fun onBlueToothEnabled() {
         BleManager.getInstance().init(application)
+        BleManager.getInstance().setForegroundService(true)
         btn2.setOnClickListener {
             BleManager.getInstance().scan(ScanConfig(5000),object :ScanResultListener{
                 override fun onDeviceFound(device: BluetoothDevice?) {

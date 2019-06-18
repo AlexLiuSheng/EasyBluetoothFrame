@@ -240,5 +240,13 @@ public class BleManager implements BleFunction {
         this.notification=notification;
     }
 
+    @Override
+    public void enableDiscoverable(long time) {
+        Intent discoverableIntent = new
+                Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+        discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, time);
+        application.startActivity(discoverableIntent);
+    }
+
 
 }
