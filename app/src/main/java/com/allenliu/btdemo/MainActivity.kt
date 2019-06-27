@@ -1,17 +1,10 @@
 package com.allenliu.btdemo
 
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.bluetooth.BluetoothDevice
-import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
-import android.support.v4.app.NotificationCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
-
 import com.allenliu.classicbt.BleManager
 import com.allenliu.classicbt.BluetoothPermissionHandler
 import com.allenliu.classicbt.CLog
@@ -30,26 +23,16 @@ class MainActivity : AppCompatActivity(),BluetoothPermissionCallBack {
     override fun permissionFailed() {
 
     }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         permissionCallBack.onActivityResult(requestCode, resultCode, data)
     }
-
-
   override  fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         permissionCallBack.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        recyclerview.layoutManager=LinearLayoutManager(this)
-        list=ArrayList()
-        recyclerview.adapter=MyAdapter(this,list)
-       permissionCallBack.start()
-    }
     override fun onBlueToothEnabled() {
+
         BleManager.getInstance().init(application)
         BleManager.getInstance().setForegroundService(true)
         btn2.setOnClickListener {
@@ -72,7 +55,7 @@ class MainActivity : AppCompatActivity(),BluetoothPermissionCallBack {
             t("register server success.you can connnect device now.")
             BleManager.getInstance().registerServerConnection(object: ConnectResultlistner {
                 override fun connectSuccess(connect: Connect?) {
-                     this@MainActivity.connect=connect
+                    this@MainActivity.connect=connect
                     read()
                 }
 
@@ -85,8 +68,20 @@ class MainActivity : AppCompatActivity(),BluetoothPermissionCallBack {
         btn3.setOnClickListener {
             write()
         }
+        btnDiscoverable.setOnClickListener {
+            BleManager.getInstance().enableDiscoverable(300)
+        }
 
     }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        recyclerview.layoutManager=LinearLayoutManager(this)
+        list=ArrayList()
+        recyclerview.adapter=MyAdapter(this,list)
+       permissionCallBack.start()
+    }
+
     private fun isContained(result: BluetoothDevice): Boolean {
         if (result.name == null || "null".equals(result.name, ignoreCase = true))
             return true

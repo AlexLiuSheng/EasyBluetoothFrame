@@ -1,6 +1,7 @@
 package com.allenliu.classicbt;
 
 import android.Manifest;
+import android.arch.lifecycle.OnLifecycleEvent;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.DialogInterface;

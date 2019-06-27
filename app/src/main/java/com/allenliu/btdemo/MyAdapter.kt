@@ -10,6 +10,7 @@ import com.allenliu.classicbt.BleManager
 import com.allenliu.classicbt.CLog
 import com.allenliu.classicbt.Connect
 import com.allenliu.classicbt.listener.ConnectResultlistner
+import com.allenliu.classicbt.listener.PinResultListener
 import java.lang.Exception
 
 /**
@@ -24,7 +25,7 @@ class MyAdapter(var context: MainActivity, d: List<BluetoothDevice>) : RecyclerV
 
 
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): MyViewHolder {
-        return MyViewHolder(LayoutInflater.from(context).inflate(R.layout.item, p0,false))
+        return MyViewHolder(LayoutInflater.from(context).inflate(R.layout.item, p0, false))
     }
 
     override fun getItemCount(): Int {
@@ -36,30 +37,40 @@ class MyAdapter(var context: MainActivity, d: List<BluetoothDevice>) : RecyclerV
         p0.tv.setOnClickListener {
             CLog.e("click connect")
             context.showLoading()
-            BleManager.getInstance().connect(data[p1], object : ConnectResultlistner {
-                override fun connectSuccess(connect: Connect?) {
-                    CLog.e(" connect success")
-                    context.dismiss()
-                    context.connect=connect
-                    context.t("connect success")
-                    context.read()
-
-                }
-
-                override fun connectFailed(e: Exception?) {
-
-                    context.dismiss()
-                    context.t("connect failed:${e?.message}")
-
-//                    e?.printStackTrace()
-                }
-            })
+            if (BleManager.getInstance().pairedDevices.contains(data[p1])) {
+                connect(context, data[p1])
+            } else {
+                BleManager.getInstance().pin(
+                    data[p1]
+                ) { connect(context, data[p1]) }
+            }
 
 
         }
     }
 
 
+}
+
+private fun connect(context: MainActivity, d: BluetoothDevice) {
+    BleManager.getInstance().connect(d, object : ConnectResultlistner {
+        override fun connectSuccess(connect: Connect?) {
+            CLog.e(" connect success")
+            context.dismiss()
+            context.connect = connect
+            context.t("connect success")
+            context.read()
+
+        }
+
+        override fun connectFailed(e: Exception?) {
+
+            context.dismiss()
+            context.t("connect failed:${e?.message}")
+
+//                    e?.printStackTrace()
+        }
+    })
 }
 
 class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

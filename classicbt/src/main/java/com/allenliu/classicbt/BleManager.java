@@ -21,7 +21,6 @@ import java.util.Set;
  * @author AllenLiu
  * @version 1.0
  * @date 2019/5/8
-
  */
 public class BleManager implements BleFunction {
     private BluetoothAdapter mBluetoothAdapter;
@@ -36,9 +35,10 @@ public class BleManager implements BleFunction {
     private BtReceiver mReceiver;
     private String uuid;
     private Notification notification;
-    private boolean isForegroundService=false;
+    private boolean isForegroundService = false;
     private ConnectResultlistner clientConnectResultListener;
     private ConnectResultlistner serverConnectResultListener;
+
     public static BleManager getInstance() {
         return Holder.client;
     }
@@ -163,8 +163,8 @@ public class BleManager implements BleFunction {
 
     @Override
     public void connect(BluetoothDevice device, ConnectResultlistner c) {
-        this.clientConnectResultListener=c;
-        ConnectService.start(application,  device, ConnectThread.CLIENT, uuid,isForegroundService,notification);
+        this.clientConnectResultListener = c;
+        ConnectService.start(application, device, ConnectThread.CLIENT, uuid, isForegroundService, notification);
 
 
     }
@@ -217,26 +217,26 @@ public class BleManager implements BleFunction {
 
     @Override
     public void setServerConnectResultListener(ConnectResultlistner connectResultListener) {
-        this.serverConnectResultListener=connectResultListener;
+        this.serverConnectResultListener = connectResultListener;
 //        if (serverConnectThread != null)
 //            serverConnectThread.setConnectResultlistner(connectResultListener);
     }
 
     @Override
     public void registerServerConnection(ConnectResultlistner connectResultListener) {
-        this.serverConnectResultListener=connectResultListener;
-        ConnectService.start(application,  null, ConnectThread.SERVER, uuid,isForegroundService,notification);
+        this.serverConnectResultListener = connectResultListener;
+        ConnectService.start(application, null, ConnectThread.SERVER, uuid, isForegroundService, notification);
 
     }
 
     @Override
     public void setForegroundService(boolean foregroundService) {
-        this.isForegroundService=foregroundService;
+        this.isForegroundService = foregroundService;
     }
 
     @Override
     public void setNotification(Notification notification) {
-        this.notification=notification;
+        this.notification = notification;
     }
 
     @Override
@@ -244,6 +244,7 @@ public class BleManager implements BleFunction {
         Intent discoverableIntent = new
                 Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
         discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, time);
+        discoverableIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         application.startActivity(discoverableIntent);
     }
 

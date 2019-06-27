@@ -1,13 +1,13 @@
 package com.allenliu.classicbt;
 
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.Service;
+import android.app.*;
 import android.bluetooth.BluetoothDevice;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
@@ -55,6 +55,18 @@ public class ConnectService extends Service {
         return super.onStartCommand(intent, flags, startId);
     }
 
+    private int getAppIcon(){
+        PackageManager pm=getPackageManager();
+        ApplicationInfo applicationInfo= null;
+        try {
+            applicationInfo = pm.getApplicationInfo(getPackageName(), PackageManager.GET_META_DATA);
+            return applicationInfo.icon;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return 0;
+
+    }
     private Notification buildNotification() {
         String channelId="BluetoothForegroundServiceID";
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
@@ -67,8 +79,10 @@ public class ConnectService extends Service {
         }
         return new NotificationCompat.Builder(this,channelId)
                 .setContentTitle(getString(R.string.bluetooth_service))
-                .setTicker(getString(R.string.bluetooth_service_is_running))
-                .setSmallIcon(R.drawable.ic_launcher)
+//                .setTicker(getString(R.string.bluetooth_service_is_running))
+                .setContentText(getString(R.string.bluetooth_service_is_running))
+
+                .setSmallIcon(getAppIcon())
                 .build();
     }
 
