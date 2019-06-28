@@ -1,6 +1,31 @@
+<p align=center>
+<img src='https://github.com/AlexLiuSheng/EasyBluetoothFrame/blob/master/ui/logo.png' width=20%/>
+ </p>
+ <p align=center>
+
+<a href="https://jitpack.io/#AlexLiuSheng/EasyBluetoothFrame">
+    <img src="https://jitpack.io/v/AlexLiuSheng/EasyBluetoothFrame.svg">
+</a>
+<a href="https://android-arsenal.com/api?level=14">
+    <img src="https://img.shields.io/badge/API-16%2B-brightgreen.svg?style=flat">
+</a>
+<a href="https://developer.android.com/index.html">
+    <img src="https://img.shields.io/badge/platform-android-brightgreen.svg">
+</a>
+<a href="https://github.com/AlexLiuSheng/EasyBluetoothFrame/blob/master/LICENSE">
+    <img src="https://img.shields.io/badge/license-Apache%202.0-blue.svg">
+</a>
+</p>
+
+ 
+ 
 ## EasyBluetoothFrame
 这是一个适用于经典蓝牙通讯的快速开发框架。
 
+
+ 
+ 
+ 
 ### 框架适用范围
    本框架只适用于支持蓝牙3.0协议的设备进行数据连接传输，也就是通常说的经典蓝牙，通常手机与手机之间的连接都属于经典蓝牙模式范畴，而一般连接外设耳机等设备，大多
    属于BLE蓝牙（低功耗蓝牙），这两种蓝牙除了名字有相同之外，通信方式、原理、协议完全不一样。
@@ -232,8 +257,11 @@ BleManager.getInstance().connect(d, object : ConnectResultlistner {
     void setNotification(Notification notification);
     void enableDiscoverable(long time);
 ```
+## demo
+<img src='https://github.com/AlexLiuSheng/EasyBluetoothFrame/blob/master/ui/gif.gif' width=20%/>
+
 ## TODO
-  - [x]传输数据进度完善
+  - [ ] 传输数据进度完善
 ## Last
 - 详细适用请看demo，第一版可能还有些不完善,持续完善中
 - 欢迎PR或Issues
@@ -241,3 +269,4 @@ BleManager.getInstance().connect(d, object : ConnectResultlistner {
 ## License
 ---
 Apache 2.0
+
