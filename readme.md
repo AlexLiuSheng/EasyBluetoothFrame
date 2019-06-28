@@ -7,7 +7,7 @@
     <img src="https://jitpack.io/v/AlexLiuSheng/EasyBluetoothFrame.svg">
 </a>
 <a href="https://android-arsenal.com/api?level=14">
-    <img src="https://img.shields.io/badge/API-16%2B-brightgreen.svg?style=flat">
+    <img src="https://img.shields.io/badge/API-14%2B-brightgreen.svg?style=flat">
 </a>
 <a href="https://developer.android.com/index.html">
     <img src="https://img.shields.io/badge/platform-android-brightgreen.svg">
