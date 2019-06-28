@@ -96,6 +96,7 @@ class MainActivity : AppCompatActivity(),BluetoothPermissionCallBack {
     fun read(){
         connect?.read(object: TransferProgressListener {
             override fun transferSuccess(bytes: ByteArray?) {
+                t("received message")
                 bytes?.let { it1 ->
                     tvReceive.text=String(it1)
                 }
@@ -114,7 +115,7 @@ class MainActivity : AppCompatActivity(),BluetoothPermissionCallBack {
         val text=et.text.toString()
         connect?.write(text.toByteArray(), object : TransferProgressListener {
             override fun transferSuccess(bytes: ByteArray?) {
-
+                t("send message successful")
             }
 
             override fun transferFailed(msg:String) {

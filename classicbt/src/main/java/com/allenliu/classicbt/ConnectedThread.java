@@ -16,7 +16,6 @@ import java.util.concurrent.LinkedBlockingQueue;
  * @author AllenLiu
  * @version 1.0
  * @date 2019/5/8
-
  */
 public class ConnectedThread implements Runnable {
     public static final int READ = 0;
@@ -41,7 +40,7 @@ public class ConnectedThread implements Runnable {
         this.transferProgressListener = transferProgressListener;
     }
 
-    public synchronized void  write(byte[] bytes) {
+    public synchronized void write(byte[] bytes) {
         CLog.e("put bytes to queue");
         try {
             queue.put(bytes);
@@ -86,25 +85,25 @@ public class ConnectedThread implements Runnable {
                 int progress = 0;
                 while (count == 0) {
                     count = mmInStream.available();
-            }
-            CLog.e("total:"+count);
+                }
+                CLog.e("total:" + count);
                 float current = 0;
 
                 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                 do {
                     bytes = mmInStream.read(buffer);
                     CLog.e("read bytes:" + bytes);
-                    if(bytes>0) {
+                    if (bytes > 0) {
                         current += bytes;
                         progress = (int) ((current / count) * 100);
                         byteArrayOutputStream.write(buffer);
                         handleTransfering(progress);
-                    }else{
+                    } else {
                         break;
                     }
 
                 } while (mmInStream.available() > 0);
-                CLog.e("read success:"+bytes);
+                CLog.e("read success:" + bytes);
                 handleSuccessed(byteArrayOutputStream.toByteArray());
 
             } catch (IOException e) {
@@ -123,7 +122,7 @@ public class ConnectedThread implements Runnable {
         });
     }
 
-    private void handleSuccessed(byte[]bytes) {
+    private void handleSuccessed(byte[] bytes) {
         handler.post(() -> {
             if (transferProgressListener != null)
                 transferProgressListener.transferSuccess(bytes);
@@ -148,7 +147,7 @@ public class ConnectedThread implements Runnable {
                     int index = 0;
                     for (byte[] bytes : set) {
                         mmOutStream.write(bytes);
-                        handleTransfering((int) ((((++index) / (float) size))*100));
+                        handleTransfering((int) ((((++index) / (float) size)) * 100));
                     }
 //                    mmOutStream.close();
                     handleSuccessed(null);

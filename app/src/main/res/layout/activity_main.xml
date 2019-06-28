@@ -22,6 +22,7 @@
                 android:textColor="@android:color/white"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:textSize="13sp"
                 android:layout_marginRight="10dp"
                 android:text="register as server"
                 android:textAllCaps="false"
@@ -29,10 +30,12 @@
 
         <Button
                 android:layout_width="wrap_content"
-                android:layout_marginLeft="10dp"
+
                 android:id="@+id/btn2"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:textSize="13sp"
+
                 android:background="@drawable/button_selc"
 
                 android:textColor="@android:color/white"
@@ -43,10 +46,10 @@
                 android:layout_width="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:id="@+id/btnDiscoverable"
+                android:textSize="13sp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@drawable/button_selc"
-
                 android:textColor="@android:color/white"
                 android:text="enable discoverable"
                 android:textAllCaps="false"
@@ -71,6 +74,7 @@
                 android:layout_height="wrap_content"
                 android:text="write data"
                 android:background="@drawable/button_selc"
+                android:textSize="13sp"
 
                 android:textColor="@android:color/white"
                 android:textAllCaps="false"
