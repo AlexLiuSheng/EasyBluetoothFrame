@@ -54,6 +54,10 @@ class MyAdapter(var context: MainActivity, d: List<BluetoothDevice>) : RecyclerV
 
 private fun connect(context: MainActivity, d: BluetoothDevice) {
     BleManager.getInstance().connect(d, object : ConnectResultlistner {
+        override fun disconnected() {
+
+        }
+
         override fun connectSuccess(connect: Connect?) {
             CLog.e(" connect success")
             context.dismiss()

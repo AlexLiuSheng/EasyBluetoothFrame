@@ -8,6 +8,8 @@ package com.allenliu.classicbt.listener;
 public interface TransferProgressListener {
     void transfering(int progress);
     void transferSuccess(byte[] bytes);
-    void transferFailed(String message);
+    void transferFailed(Exception exception);
+
+
 
 }

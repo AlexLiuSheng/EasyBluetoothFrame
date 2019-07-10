@@ -16,29 +16,32 @@ import com.allenliu.classicbt.listener.TransferProgressListener
 import com.allenliu.classicbt.scan.ScanConfig
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity(),BluetoothPermissionCallBack {
-    private lateinit var list:ArrayList<BluetoothDevice>
-    var connect:Connect?=null
-    private val permissionCallBack=BluetoothPermissionHandler(this,this)
+class MainActivity : AppCompatActivity(), BluetoothPermissionCallBack {
+    private lateinit var list: ArrayList<BluetoothDevice>
+    var connect: Connect? = null
+    private val permissionCallBack = BluetoothPermissionHandler(this, this)
     override fun permissionFailed() {
 
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         permissionCallBack.onActivityResult(requestCode, resultCode, data)
     }
-  override  fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         permissionCallBack.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
+
     override fun onBlueToothEnabled() {
 
         BleManager.getInstance().init(application)
         BleManager.getInstance().setForegroundService(true)
         btn2.setOnClickListener {
-            BleManager.getInstance().scan(ScanConfig(5000),object :ScanResultListener{
+            BleManager.getInstance().scan(ScanConfig(5000), object : ScanResultListener {
                 override fun onDeviceFound(device: BluetoothDevice?) {
-                    if(!isContained(device!!)){
+                    if (!isContained(device!!)) {
                         list.add(device)
                         recyclerview.adapter?.notifyDataSetChanged()
                     }
@@ -51,19 +54,9 @@ class MainActivity : AppCompatActivity(),BluetoothPermissionCallBack {
                 }
             })
         }
-        btn1.setOnClickListener{
+        btn1.setOnClickListener {
             t("register server success.you can connnect device now.")
-            BleManager.getInstance().registerServerConnection(object: ConnectResultlistner {
-                override fun connectSuccess(connect: Connect?) {
-                    this@MainActivity.connect=connect
-                    read()
-                }
-
-                override fun connectFailed(e: Exception?) {
-
-                }
-
-            })
+            registerServer()
         }
         btn3.setOnClickListener {
             write()
@@ -73,38 +66,67 @@ class MainActivity : AppCompatActivity(),BluetoothPermissionCallBack {
         }
 
     }
+
+    fun registerServer() {
+        BleManager.getInstance().registerServerConnection(object : ConnectResultlistner {
+            override fun disconnected() {
+                t("bluetooth has disconnected")
+                BleManager.getInstance().destory()
+                registerServer()
+            }
+
+            override fun connectSuccess(connect: Connect?) {
+                this@MainActivity.connect = connect
+                read()
+            }
+
+            override fun connectFailed(e: Exception?) {
+
+            }
+
+        })
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        recyclerview.layoutManager=LinearLayoutManager(this)
-        list=ArrayList()
-        recyclerview.adapter=MyAdapter(this,list)
-       permissionCallBack.start()
+        recyclerview.layoutManager = LinearLayoutManager(this)
+        list = ArrayList()
+        recyclerview.adapter = MyAdapter(this, list)
+        permissionCallBack.start()
     }
 
     private fun isContained(result: BluetoothDevice): Boolean {
         if (result.name == null || "null".equals(result.name, ignoreCase = true))
             return true
         for (device in list) {
-            if ( result.address == device.address) {
+            if (result.address == device.address) {
                 return true
             }
         }
         return false
     }
 
-    fun read(){
-        connect?.read(object: TransferProgressListener {
+    fun read() {
+        connect?.read(object : TransferProgressListener {
+
+
             override fun transferSuccess(bytes: ByteArray?) {
                 t("received message")
                 bytes?.let { it1 ->
-                    tvReceive.text=String(it1)
+                    tvReceive.text = String(it1)
                 }
+
                 CLog.e("read string")
             }
-            override fun transferFailed(msg:String) {
-                t(msg)
+
+            override fun transferFailed(msg: Exception) {
+//                msg.message?.run {
+//                    t(this)
+//                }
+
             }
+
             override fun transfering(progress: Int) {
                 CLog.e("read progress:$progress")
             }
@@ -112,14 +134,22 @@ class MainActivity : AppCompatActivity(),BluetoothPermissionCallBack {
     }
 
     private fun write() {
-        val text=et.text.toString()
+        val text = et.text.toString()
         connect?.write(text.toByteArray(), object : TransferProgressListener {
+//            override fun disconnected() {
+//                t("bluetooth has disconnected")
+//
+//            }
+
             override fun transferSuccess(bytes: ByteArray?) {
                 t("send message successful")
             }
 
-            override fun transferFailed(msg:String) {
-                t(msg)
+            override fun transferFailed(msg: Exception) {
+                msg.message?.run {
+                    t(this)
+                }
+
             }
 
             override fun transfering(progress: Int) {

@@ -1,10 +1,12 @@
 package com.allenliu.classicbt;
 
+import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import com.allenliu.classicbt.listener.ConnectResultlistner;
 import com.allenliu.classicbt.listener.PinResultListener;
 import com.allenliu.classicbt.listener.ResultListener;
 import com.allenliu.classicbt.listener.ScanResultListener;
@@ -22,7 +24,8 @@ public class BtReceiver extends BroadcastReceiver {
     private PinResultListener pinResultListener;
     private ResultListener cancelPinResultListener;
     private final String TAG = "BtReceiver";
-
+   private ConnectResultlistner serverConnectResultListener;
+   private ConnectResultlistner clientConnectResultListener;
     public void setPinResultListener(PinResultListener pinResultListener) {
         this.pinResultListener = pinResultListener;
     }
@@ -86,7 +89,24 @@ public class BtReceiver extends BroadcastReceiver {
                     break;
 
             }
+        }else if ((BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)&&intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, -1)
+                == BluetoothAdapter.STATE_OFF)||BluetoothDevice.ACTION_ACL_DISCONNECTED.equals(action)){
+
+                if(serverConnectResultListener!=null)
+                    serverConnectResultListener.disconnected();
+                if(clientConnectResultListener!=null)
+                    clientConnectResultListener.disconnected();
+
+
         }
 
+    }
+
+    public void setServerConnectResultListener(ConnectResultlistner serverConnectResultListener) {
+        this.serverConnectResultListener=serverConnectResultListener;
+    }
+
+    public void setClientConnectResultListener(ConnectResultlistner clientConnectResultListener) {
+        this.clientConnectResultListener=clientConnectResultListener;
     }
 }

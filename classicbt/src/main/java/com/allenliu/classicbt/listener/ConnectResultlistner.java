@@ -18,6 +18,7 @@ public interface ConnectResultlistner  {
      void connectSuccess(Connect connect);
 
      void connectFailed(Exception e);
+     void disconnected();
 
 
 

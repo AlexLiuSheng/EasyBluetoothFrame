@@ -57,6 +57,8 @@ public class BleManager implements BleFunction {
 
     public void setClientConnectResultListener(ConnectResultlistner clientConnectResultListener) {
         this.clientConnectResultListener = clientConnectResultListener;
+        mReceiver.setClientConnectResultListener(clientConnectResultListener);
+
     }
 
     public ConnectResultlistner getServerConnectResultListener() {
@@ -86,8 +88,10 @@ public class BleManager implements BleFunction {
 //            mReceiver.setPinResultListener(pinResultListener);
 //        if(cancelPinResultListener!=null)
 //            mReceiver.setCancelPinResultListener(cancelPinResultListener);
-
-
+        if (clientConnectResultListener != null)
+            mReceiver.setClientConnectResultListener(clientConnectResultListener);
+        if (serverConnectResultListener != null)
+            mReceiver.setServerConnectResultListener(serverConnectResultListener);
         if (!isRegister) {
             isRegister = true;
             // Register the BroadcastReceiver
@@ -98,6 +102,11 @@ public class BleManager implements BleFunction {
             filter.addAction(BluetoothA2dp.ACTION_CONNECTION_STATE_CHANGED);
             filter.addAction(BluetoothDevice.ACTION_PAIRING_REQUEST);
             filter.addAction(BluetoothA2dp.ACTION_PLAYING_STATE_CHANGED);
+            //<action android:name="android.bluetooth.device.action.ACL_CONNECTED" />
+            //    <action android:name="android.bluetooth.device.action.ACL_DISCONNECT_REQUESTED" />
+            //    <action android:name="android.bluetooth.device.action.ACL_DISCONNECTED" />
+            filter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECT_REQUESTED);
+            filter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECTED);
             application.registerReceiver(mReceiver, filter); // Don't forget to unregister during onDestroy
         }
     }
@@ -165,6 +174,7 @@ public class BleManager implements BleFunction {
     public void connect(BluetoothDevice device, ConnectResultlistner c) {
         this.clientConnectResultListener = c;
         ConnectService.start(application, device, ConnectThread.CLIENT, uuid, isForegroundService, notification);
+        mReceiver.setClientConnectResultListener(clientConnectResultListener);
 
 
     }
@@ -218,6 +228,8 @@ public class BleManager implements BleFunction {
     @Override
     public void setServerConnectResultListener(ConnectResultlistner connectResultListener) {
         this.serverConnectResultListener = connectResultListener;
+        mReceiver.setServerConnectResultListener(serverConnectResultListener);
+
 //        if (serverConnectThread != null)
 //            serverConnectThread.setConnectResultlistner(connectResultListener);
     }
@@ -226,6 +238,7 @@ public class BleManager implements BleFunction {
     public void registerServerConnection(ConnectResultlistner connectResultListener) {
         this.serverConnectResultListener = connectResultListener;
         ConnectService.start(application, null, ConnectThread.SERVER, uuid, isForegroundService, notification);
+        mReceiver.setServerConnectResultListener(serverConnectResultListener);
 
     }
 

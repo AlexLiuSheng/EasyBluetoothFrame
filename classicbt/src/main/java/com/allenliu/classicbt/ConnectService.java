@@ -46,6 +46,7 @@ public class ConnectService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+
         boolean isForeground=intent.getBooleanExtra(FOREGROUND,false);
         if(isForeground){
             Notification notification=intent.getParcelableExtra(NOTIFICATION)!=null?intent.getParcelableExtra(NOTIFICATION):buildNotification();
@@ -116,11 +117,14 @@ public class ConnectService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        CLog.e("stop service");
+
         if (serverConnectThread != null) {
             serverConnectThread.cancel();
         }
         if (connectThread != null)
             connectThread.cancel();
         stopForeground(true);
+
     }
 }

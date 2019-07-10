@@ -31,9 +31,9 @@ public class ConnectedThread implements Runnable {
 
 
     public ConnectedThread(BluetoothSocket socket, int mode, TransferProgressListener transferProgressListener) {
-        init(socket, mode);
         queue = new LinkedBlockingQueue<byte[]>();
         this.transferProgressListener = transferProgressListener;
+        init(socket, mode);
     }
 
     public void setTransferProgressListener(TransferProgressListener transferProgressListener) {
@@ -46,7 +46,7 @@ public class ConnectedThread implements Runnable {
             queue.put(bytes);
         } catch (InterruptedException e) {
             e.printStackTrace();
-            handleFailed(e.getMessage());
+            handleFailed(e);
         }
     }
 
@@ -60,6 +60,7 @@ public class ConnectedThread implements Runnable {
             tmpIn = socket.getInputStream();
             tmpOut = socket.getOutputStream();
         } catch (IOException e) {
+            e.printStackTrace();
         }
         mmInStream = tmpIn;
         mmOutStream = tmpOut;
@@ -80,6 +81,7 @@ public class ConnectedThread implements Runnable {
         // Keep listening to the InputStream until an exception occurs
         while (true) {
             try {
+
                 // Read from the InputStream
                 long count = 0;
                 int progress = 0;
@@ -108,12 +110,13 @@ public class ConnectedThread implements Runnable {
 
             } catch (IOException e) {
                 e.printStackTrace();
-                handleFailed(e.getMessage());
+                handleFailed(e);
                 break;
             }
 
         }
     }
+
 
     private void handleTransfering(int progress) {
         handler.post(() -> {
@@ -129,7 +132,7 @@ public class ConnectedThread implements Runnable {
         });
     }
 
-    private void handleFailed(String message) {
+    private void handleFailed(Exception message) {
         handler.post(() -> {
             if (transferProgressListener != null)
                 transferProgressListener.transferFailed(message);
@@ -141,6 +144,7 @@ public class ConnectedThread implements Runnable {
 
         while (true) {
             try {
+
                 HashSet<byte[]> set = new HashSet<>();
                 int size = queue.drainTo(set);
                 if (size > 0) {
@@ -154,7 +158,7 @@ public class ConnectedThread implements Runnable {
                 }
             } catch (IOException e) {
                 e.printStackTrace();
-                handleFailed(e.getMessage());
+                handleFailed(e);
                 break;
             }
         }
