@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.HashSet;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -155,7 +156,7 @@ public class ConnectedThread implements Runnable {
     private boolean isPacketEnd(int total, byte[] buffer) {
         if (packetDefineListener != null && total != -1) {
             PacketDefine packetDefine = packetDefineListener.getPacketEnd();
-            ByteBuffer byteBuffer = ByteBuffer.allocate(packetDefine.byteLength);
+            ByteBuffer byteBuffer = ByteBuffer.allocate(packetDefine.byteLength).order(packetDefine.byteOrder);
             byteBuffer.put(buffer, buffer.length - packetDefine.byteLength, buffer.length);
             if (byteBuffer.getInt() == packetDefine.byteValue) {
                 isCompleteDataPacket = true;
@@ -173,7 +174,8 @@ public class ConnectedThread implements Runnable {
     private boolean isPacketStart(int total, byte[] buffer) {
         if (packetDefineListener != null && total != -1) {
             PacketDefine packetDefine = packetDefineListener.getPacketStart();
-            ByteBuffer byteBuffer = ByteBuffer.allocate(packetDefine.byteLength);
+            ByteBuffer byteBuffer = ByteBuffer.allocate(packetDefine.byteLength).order(packetDefine.byteOrder);
+
             byteBuffer.put(buffer, 0, packetDefine.byteLength);
             if (byteBuffer.getInt() == packetDefine.byteValue) {
                 return true;

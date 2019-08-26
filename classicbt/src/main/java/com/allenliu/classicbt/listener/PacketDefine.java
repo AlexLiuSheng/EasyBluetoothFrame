@@ -1,5 +1,7 @@
 package com.allenliu.classicbt.listener;
 
+import java.nio.ByteOrder;
+
 /**
  * @author AllenLiu
  * @date 2019/8/26
@@ -16,8 +18,16 @@ public class PacketDefine {
      */
     public int byteValue;
 
+    public ByteOrder byteOrder=ByteOrder.BIG_ENDIAN;
+
     public PacketDefine(int byteLength, int byteValue) {
         this.byteLength = byteLength;
         this.byteValue = byteValue;
+    }
+
+    public PacketDefine(int byteLength, int byteValue, ByteOrder byteOrder) {
+        this.byteLength = byteLength;
+        this.byteValue = byteValue;
+        this.byteOrder = byteOrder;
     }
 }
