@@ -38,7 +38,7 @@ public class Connect {
     }
 
     public void setReadPacketVerifyListener(PacketDefineListner packetVerifyListener) {
-        writeThread.setPacketDefineListener(packetVerifyListener);
+        readThread.setPacketDefineListener(packetVerifyListener);
     }
 
     public void write(byte[] bytes, TransferProgressListener transferProgressListener) {
