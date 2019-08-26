@@ -157,7 +157,7 @@ public class ConnectedThread implements Runnable {
         if (packetDefineListener != null && total != -1) {
             PacketDefine packetDefine = packetDefineListener.getPacketEnd();
             ByteBuffer byteBuffer = ByteBuffer.allocate(packetDefine.byteLength).order(packetDefine.byteOrder);
-            byteBuffer.put(buffer, buffer.length - packetDefine.byteLength, buffer.length);
+            byteBuffer.put(buffer, buffer.length - packetDefine.byteLength, buffer.length-1);
             if (byteBuffer.getInt() == packetDefine.byteValue) {
                 isCompleteDataPacket = true;
                 return true;
@@ -176,7 +176,7 @@ public class ConnectedThread implements Runnable {
             PacketDefine packetDefine = packetDefineListener.getPacketStart();
             ByteBuffer byteBuffer = ByteBuffer.allocate(packetDefine.byteLength).order(packetDefine.byteOrder);
 
-            byteBuffer.put(buffer, 0, packetDefine.byteLength);
+            byteBuffer.put(buffer, 0, packetDefine.byteLength-1);
             if (byteBuffer.getInt() == packetDefine.byteValue) {
                 return true;
             } else {
