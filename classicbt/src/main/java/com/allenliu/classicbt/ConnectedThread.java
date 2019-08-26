@@ -114,7 +114,7 @@ public class ConnectedThread implements Runnable {
                     if (byteArrayOutputStream.size() == 0 && !isPacketStart(bytes, buffer)) {
                         isCompleteDataPacket = true;
                         handleFailed(new RuntimeException("data packet header is invalid"));
-                        return;
+                        break;
                     }
 //                        CLog.e("read bytes:" + bytes);
                     if (bytes > 0) {
