@@ -5,7 +5,7 @@ package com.allenliu.classicbt.listener;
  * @date 2019/8/26
  */
 public interface PacketDefineListner {
-    PacketDefine getPacketStart();
+    byte[] getPacketStart();
 
-    PacketDefine getPacketEnd();
+    byte[] getPacketEnd();
 }

@@ -3,7 +3,6 @@ package com.allenliu.classicbt;
 import android.bluetooth.BluetoothSocket;
 import android.os.Handler;
 import android.os.Looper;
-import com.allenliu.classicbt.listener.PacketDefine;
 import com.allenliu.classicbt.listener.PacketDefineListner;
 import com.allenliu.classicbt.listener.TransferProgressListener;
 
@@ -12,7 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -91,7 +90,7 @@ public class ConnectedThread implements Runnable {
         byte[] buffer = new byte[1024];  // buffer store for the stream
         int bytes; // bytes returned from read()
         // Keep listening to the InputStream until an exception occurs
-        ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream();
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         while (true) {
             try {
                 // Read from the InputStream
@@ -100,39 +99,37 @@ public class ConnectedThread implements Runnable {
                 while (count == 0) {
                     count = mmInStream.available();
                 }
-                CLog.e("total:" + count);
+//                CLog.e("total:" + count);
                 float current = 0;
                 //每次读取之前判断是否已经组装了一个完整的数据包
                 //如果是 将字节加入新的输出流
                 if (isCompleteDataPacket) {
-                    isCompleteDataPacket=false;
+                    isCompleteDataPacket = false;
                     byteArrayOutputStream = new ByteArrayOutputStream();
                 }
 
                 do {
                     bytes = mmInStream.read(buffer);
                     //如果已经定义了数据包头，验证一下是否满足
-                    if(byteArrayOutputStream.size()==0&&!isPacketStart(bytes,buffer)) {
-                        isCompleteDataPacket=true;
+                    if (byteArrayOutputStream.size() == 0 && !isPacketStart(bytes, buffer)) {
+                        isCompleteDataPacket = true;
                         handleFailed(new RuntimeException("data packet header is invalid"));
                         return;
                     }
-                        CLog.e("read bytes:" + bytes);
-                        if (bytes > 0) {
-                            current += bytes;
-                            progress = (int) ((current / count) * 100);
-                            byteArrayOutputStream.write(buffer);
-                            handleTransfering(progress);
-                        } else {
-                            break;
-                        }
-
-
+//                        CLog.e("read bytes:" + bytes);
+                    if (bytes > 0) {
+                        current += bytes;
+                        progress = (int) ((current / count) * 100);
+                        byteArrayOutputStream.write(buffer);
+                        handleTransfering(progress);
+                    } else {
+                        break;
+                    }
 
 
                 } while (mmInStream.available() > 0);
-                CLog.e("read success:" + bytes);
-             //判断是否已经到达结尾了
+                CLog.e("current segment read success:" + bytes);
+                //判断是否已经到达结尾了
                 if (isPacketEnd(bytes, buffer))
                     handleSuccessed(byteArrayOutputStream.toByteArray());
 
@@ -155,11 +152,11 @@ public class ConnectedThread implements Runnable {
      */
     private boolean isPacketEnd(int total, byte[] buffer) {
         if (packetDefineListener != null && total != -1) {
-            PacketDefine packetDefine = packetDefineListener.getPacketEnd();
-            ByteBuffer byteBuffer = ByteBuffer.allocate(packetDefine.byteLength).order(packetDefine.byteOrder);
-            byteBuffer.put(buffer, buffer.length - packetDefine.byteLength, packetDefine.byteLength);
-            byteBuffer.flip();
-            if (byteBuffer.getInt() == packetDefine.byteValue) {
+            byte[] packetDefine = packetDefineListener.getPacketEnd();
+            int endLength = packetDefine.length;
+            ByteBuffer byteBuffer = ByteBuffer.allocate(endLength);
+            byteBuffer.put(buffer, total - endLength, endLength);
+            if (Arrays.equals(byteBuffer.array(),packetDefine)) {
                 isCompleteDataPacket = true;
                 return true;
             } else {
@@ -174,15 +171,11 @@ public class ConnectedThread implements Runnable {
 
     private boolean isPacketStart(int total, byte[] buffer) {
         if (packetDefineListener != null && total != -1) {
-            PacketDefine packetDefine = packetDefineListener.getPacketStart();
-            ByteBuffer byteBuffer = ByteBuffer.allocate(packetDefine.byteLength).order(packetDefine.byteOrder);
-            byteBuffer.put(buffer, 0, packetDefine.byteLength);
-            byteBuffer.flip();
-            if (byteBuffer.getInt() == packetDefine.byteValue) {
-                return true;
-            } else {
-                return false;
-            }
+            byte[] packetDefine = packetDefineListener.getPacketStart();
+            int startLength = packetDefine.length;
+            ByteBuffer byteBuffer = ByteBuffer.allocate(startLength);
+            byteBuffer.put(buffer, 0, startLength);
+            return Arrays.equals(byteBuffer.array(), packetDefine);
 
         }
         return true;
