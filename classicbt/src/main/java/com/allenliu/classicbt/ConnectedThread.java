@@ -3,12 +3,15 @@ package com.allenliu.classicbt;
 import android.bluetooth.BluetoothSocket;
 import android.os.Handler;
 import android.os.Looper;
+import com.allenliu.classicbt.listener.PacketDefine;
+import com.allenliu.classicbt.listener.PacketDefineListner;
 import com.allenliu.classicbt.listener.TransferProgressListener;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.ByteBuffer;
 import java.util.HashSet;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -28,7 +31,11 @@ public class ConnectedThread implements Runnable {
 
     private Handler handler;
     private TransferProgressListener transferProgressListener;
-
+    private PacketDefineListner packetDefineListener;
+    /**
+     * 判断是否是一个完整的数据包
+     */
+    private boolean isCompleteDataPacket = false;
 
     public ConnectedThread(BluetoothSocket socket, int mode, TransferProgressListener transferProgressListener) {
         queue = new LinkedBlockingQueue<byte[]>();
@@ -38,6 +45,10 @@ public class ConnectedThread implements Runnable {
 
     public void setTransferProgressListener(TransferProgressListener transferProgressListener) {
         this.transferProgressListener = transferProgressListener;
+    }
+
+    public void setPacketDefineListener(PacketDefineListner packetDefineListener) {
+        this.packetDefineListener = packetDefineListener;
     }
 
     public synchronized void write(byte[] bytes) {
@@ -79,9 +90,9 @@ public class ConnectedThread implements Runnable {
         byte[] buffer = new byte[1024];  // buffer store for the stream
         int bytes; // bytes returned from read()
         // Keep listening to the InputStream until an exception occurs
+        ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream();
         while (true) {
             try {
-
                 // Read from the InputStream
                 long count = 0;
                 int progress = 0;
@@ -90,23 +101,40 @@ public class ConnectedThread implements Runnable {
                 }
                 CLog.e("total:" + count);
                 float current = 0;
+                //每次读取之前判断是否已经组装了一个完整的数据包
+                //如果是 将字节加入新的输出流
+                if (isCompleteDataPacket) {
+                    isCompleteDataPacket=false;
+                    byteArrayOutputStream = new ByteArrayOutputStream();
+                }
 
-                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                 do {
                     bytes = mmInStream.read(buffer);
-                    CLog.e("read bytes:" + bytes);
-                    if (bytes > 0) {
-                        current += bytes;
-                        progress = (int) ((current / count) * 100);
-                        byteArrayOutputStream.write(buffer);
-                        handleTransfering(progress);
-                    } else {
-                        break;
+                    //如果已经定义了数据包头，验证一下是否满足
+                    if(byteArrayOutputStream.size()==0&&!isPacketStart(bytes,buffer)) {
+                        isCompleteDataPacket=true;
+                        handleFailed(new RuntimeException("data packet header is invalid"));
+                        return;
                     }
+                        CLog.e("read bytes:" + bytes);
+                        if (bytes > 0) {
+                            current += bytes;
+                            progress = (int) ((current / count) * 100);
+                            byteArrayOutputStream.write(buffer);
+                            handleTransfering(progress);
+                        } else {
+                            break;
+                        }
+
+
+
 
                 } while (mmInStream.available() > 0);
                 CLog.e("read success:" + bytes);
-                handleSuccessed(byteArrayOutputStream.toByteArray());
+             //判断是否已经到达结尾了
+                if (isPacketEnd(bytes, buffer))
+                    handleSuccessed(byteArrayOutputStream.toByteArray());
+
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -115,6 +143,46 @@ public class ConnectedThread implements Runnable {
             }
 
         }
+    }
+
+    /**
+     * 数据包是否结束，默认大端模式
+     *
+     * @param total
+     * @param buffer
+     * @return
+     */
+    private boolean isPacketEnd(int total, byte[] buffer) {
+        if (packetDefineListener != null && total != -1) {
+            PacketDefine packetDefine = packetDefineListener.getPacketEnd();
+            ByteBuffer byteBuffer = ByteBuffer.allocate(packetDefine.byteLength);
+            byteBuffer.put(buffer, buffer.length - packetDefine.byteLength, buffer.length);
+            if (byteBuffer.getInt() == packetDefine.byteValue) {
+                isCompleteDataPacket = true;
+                return true;
+            } else {
+                isCompleteDataPacket = false;
+                return false;
+            }
+
+        }
+        isCompleteDataPacket = true;
+        return true;
+    }
+
+    private boolean isPacketStart(int total, byte[] buffer) {
+        if (packetDefineListener != null && total != -1) {
+            PacketDefine packetDefine = packetDefineListener.getPacketStart();
+            ByteBuffer byteBuffer = ByteBuffer.allocate(packetDefine.byteLength);
+            byteBuffer.put(buffer, 0, packetDefine.byteLength);
+            if (byteBuffer.getInt() == packetDefine.byteValue) {
+                return true;
+            } else {
+                return false;
+            }
+
+        }
+        return true;
     }
 
 

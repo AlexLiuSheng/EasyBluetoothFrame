@@ -1,6 +1,7 @@
 package com.allenliu.classicbt;
 
 import android.bluetooth.BluetoothSocket;
+import com.allenliu.classicbt.listener.PacketDefineListner;
 import com.allenliu.classicbt.listener.TransferProgressListener;
 
 import java.io.Serializable;
@@ -11,9 +12,8 @@ import java.util.concurrent.Executors;
  * @author AllenLiu
  * @version 1.0
  * @date 2019/5/8
-
  */
-public class Connect  {
+public class Connect {
 
     private ExecutorService executor;
     private ConnectedThread readThread;
@@ -32,11 +32,16 @@ public class Connect  {
         writeThread.setTransferProgressListener(transferProgressListener);
     }
 
+
     public void setReadProgressListener(TransferProgressListener transferProgressListener) {
         readThread.setTransferProgressListener(transferProgressListener);
     }
 
-    public void write(byte[] bytes,TransferProgressListener transferProgressListener) {
+    public void setReadPacketVerifyListener(PacketDefineListner packetVerifyListener) {
+        writeThread.setPacketDefineListener(packetVerifyListener);
+    }
+
+    public void write(byte[] bytes, TransferProgressListener transferProgressListener) {
         writeThread.setTransferProgressListener(transferProgressListener);
         writeThread.write(bytes);
     }

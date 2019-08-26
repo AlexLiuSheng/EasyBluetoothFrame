@@ -110,7 +110,6 @@ class MainActivity : AppCompatActivity(), BluetoothPermissionCallBack {
     fun read() {
         connect?.read(object : TransferProgressListener {
 
-
             override fun transferSuccess(bytes: ByteArray?) {
                 t("received message")
                 bytes?.let { it1 ->
