@@ -86,7 +86,14 @@
             android:layout_width="wrap_content"
             android:text="received message："
             android:layout_height="wrap_content"/>
+<android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_height="match_parent">
     <TextView
             android:layout_width="wrap_content"
             android:id="@+id/tvReceive"
@@ -99,6 +106,8 @@
             android:id="@+id/recyclerview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>
 
 
 </LinearLayout>

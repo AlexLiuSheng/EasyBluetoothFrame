@@ -120,7 +120,7 @@ public class ConnectedThread implements Runnable {
                     if (bytes > 0) {
                         current += bytes;
                         progress = (int) ((current / count) * 100);
-                        byteArrayOutputStream.write(buffer);
+                        byteArrayOutputStream.write(buffer,0,bytes);
                         handleTransfering(progress);
                     } else {
                         break;
@@ -131,7 +131,7 @@ public class ConnectedThread implements Runnable {
                 CLog.e("current segment read success:" + bytes);
                 //判断是否已经到达结尾了
                 if (isPacketEnd(bytes, buffer))
-                    handleSuccessed(byteArrayOutputStream.toByteArray());
+                     handleSuccessed(byteArrayOutputStream.toByteArray());
 
 
             } catch (IOException e) {
@@ -156,6 +156,8 @@ public class ConnectedThread implements Runnable {
             int endLength = packetDefine.length;
             ByteBuffer byteBuffer = ByteBuffer.allocate(endLength);
             byteBuffer.put(buffer, total - endLength, endLength);
+            CLog.e("defined foot:"+Arrays.toString(packetDefine)+"current foot:"+Arrays.toString(byteBuffer.array()));
+
             if (Arrays.equals(byteBuffer.array(),packetDefine)) {
                 isCompleteDataPacket = true;
                 return true;
@@ -175,6 +177,7 @@ public class ConnectedThread implements Runnable {
             int startLength = packetDefine.length;
             ByteBuffer byteBuffer = ByteBuffer.allocate(startLength);
             byteBuffer.put(buffer, 0, startLength);
+            CLog.e("defined header:"+Arrays.toString(packetDefine)+"current header:"+Arrays.toString(byteBuffer.array()));
             return Arrays.equals(byteBuffer.array(), packetDefine);
 
         }
