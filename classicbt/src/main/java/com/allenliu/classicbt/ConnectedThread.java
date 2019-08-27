@@ -3,7 +3,7 @@ package com.allenliu.classicbt;
 import android.bluetooth.BluetoothSocket;
 import android.os.Handler;
 import android.os.Looper;
-import com.allenliu.classicbt.listener.PacketDefineListner;
+import com.allenliu.classicbt.listener.PacketDefineListener;
 import com.allenliu.classicbt.listener.TransferProgressListener;
 
 import java.io.ByteArrayOutputStream;
@@ -31,7 +31,7 @@ public class ConnectedThread implements Runnable {
 
     private Handler handler;
     private TransferProgressListener transferProgressListener;
-    private PacketDefineListner packetDefineListener;
+    private PacketDefineListener packetDefineListener;
     /**
      * 判断是否是一个完整的数据包
      */
@@ -47,7 +47,7 @@ public class ConnectedThread implements Runnable {
         this.transferProgressListener = transferProgressListener;
     }
 
-    public void setPacketDefineListener(PacketDefineListner packetDefineListener) {
+    public void setPacketDefineListener(PacketDefineListener packetDefineListener) {
         this.packetDefineListener = packetDefineListener;
     }
 

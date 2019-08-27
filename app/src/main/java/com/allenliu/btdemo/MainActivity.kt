@@ -13,11 +13,15 @@ import com.allenliu.classicbt.listener.*
 import com.allenliu.classicbt.scan.ScanConfig
 import kotlinx.android.synthetic.main.activity_main.*
 import java.nio.ByteBuffer
-import java.nio.ByteOrder
 
 class MainActivity : AppCompatActivity(), BluetoothPermissionCallBack {
     private lateinit var list: ArrayList<BluetoothDevice>
     var connect: Connect? = null
+    /**
+     * 自定义每一个完整的数据包的开头和结束字节
+     */
+    val start = "开始\n".toByteArray()
+    val end = "结束\n".toByteArray()
     private val permissionCallBack = BluetoothPermissionHandler(this, this)
     override fun permissionFailed() {
 
@@ -111,9 +115,7 @@ class MainActivity : AppCompatActivity(), BluetoothPermissionCallBack {
 //        val buffer=ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(a)
 //        val b:Byte= 0x03
 //        val buffer2=ByteBuffer.allocate(1).order(ByteOrder.LITTLE_ENDIAN).put(b)
-        val start = "开始\n".toByteArray()
-        val end = "结束\n".toByteArray();
-        connect?.setReadPacketVerifyListener(object : PacketDefineListner {
+        connect?.setReadPacketVerifyListener(object : PacketDefineListener {
             override fun getPacketStart(): ByteArray {
                 return start
 
@@ -152,8 +154,7 @@ class MainActivity : AppCompatActivity(), BluetoothPermissionCallBack {
     private fun write() {
         val text = et.text.toString()
         val bytes = text.toByteArray()
-        val start = "开始\n".toByteArray()
-        val end = "结束\n".toByteArray()
+
         val b = ByteBuffer.allocate(start.size + end.size + bytes.size)
         b.put(start)
         b.put(bytes)

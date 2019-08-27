@@ -193,6 +193,20 @@ BleManager.getInstance().connect(d, object : ConnectResultlistner {
 
 
 ### 传输数据
+#### **NewFeature自定义一个完整数据包包头、包尾**
+```
+   connect?.setReadPacketVerifyListener(object : PacketDefineListener {
+            override fun getPacketStart(): ByteArray {
+                return start
+
+            }
+
+            override fun getPacketEnd(): ByteArray {
+                return end
+
+            }
+        })
+```
 #### 读
 ```
   connect?.read(object: TransferProgressListener {
