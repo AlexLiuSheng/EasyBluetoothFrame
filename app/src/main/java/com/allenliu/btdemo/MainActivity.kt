@@ -17,12 +17,14 @@ import java.nio.ByteBuffer
 class MainActivity : AppCompatActivity(), BluetoothPermissionCallBack {
     private lateinit var list: ArrayList<BluetoothDevice>
     var connect: Connect? = null
-    /**
-     * 自定义每一个完整的数据包的开头和结束字节
-     */
-    val start = "开始\n".toByteArray()
-    val end = "结束\n".toByteArray()
+
+
+    //包 的开头结尾定义
+    val start = "".toByteArray()
+    val end = "".toByteArray()
+
     private val permissionCallBack = BluetoothPermissionHandler(this, this)
+
     override fun permissionFailed() {
 
     }
@@ -37,6 +39,7 @@ class MainActivity : AppCompatActivity(), BluetoothPermissionCallBack {
         permissionCallBack.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
+    //听说读写
     override fun onBlueToothEnabled() {
 
         BleManager.getInstance().init(application)
@@ -70,6 +73,7 @@ class MainActivity : AppCompatActivity(), BluetoothPermissionCallBack {
 
     }
 
+    //也是连接功能
     fun registerServer() {
         BleManager.getInstance().registerServerConnection(object : ConnectResultlistner {
             override fun disconnected() {
@@ -90,6 +94,7 @@ class MainActivity : AppCompatActivity(), BluetoothPermissionCallBack {
         })
     }
 
+    //Activity的主函数
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -100,6 +105,7 @@ class MainActivity : AppCompatActivity(), BluetoothPermissionCallBack {
         permissionCallBack.start()
     }
 
+    //应该是设备列表系列的功能
     private fun isContained(result: BluetoothDevice): Boolean {
         if (result.name == null || "null".equals(result.name, ignoreCase = true))
             return true
@@ -111,6 +117,7 @@ class MainActivity : AppCompatActivity(), BluetoothPermissionCallBack {
         return false
     }
 
+    //数据收发
     fun read() {
 //        val a:Int= -0x146f1470
 //        val buffer=ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(a)
@@ -124,9 +131,9 @@ class MainActivity : AppCompatActivity(), BluetoothPermissionCallBack {
 
             override fun getPacketEnd(): ByteArray {
                 return end
-
             }
         })
+
         connect?.read(object : TransferProgressListener {
 
             override fun transferSuccess(bytes: ByteArray?) {
@@ -152,6 +159,7 @@ class MainActivity : AppCompatActivity(), BluetoothPermissionCallBack {
         })
     }
 
+    //发数据
     private fun write() {
         val text = et.text.toString()
         val bytes = text.toByteArray()
@@ -184,6 +192,7 @@ class MainActivity : AppCompatActivity(), BluetoothPermissionCallBack {
         })
     }
 
+    //善后
     override fun onDestroy() {
         super.onDestroy()
         BleManager.getInstance().destory()
