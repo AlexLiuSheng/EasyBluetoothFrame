@@ -3,8 +3,8 @@ package com.allenliu.btdemo
 import android.bluetooth.BluetoothDevice
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.allenliu.classicbt.BleManager
 import com.allenliu.classicbt.BluetoothPermissionHandler
 import com.allenliu.classicbt.CLog
@@ -93,7 +93,8 @@ class MainActivity : AppCompatActivity(), BluetoothPermissionCallBack {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        recyclerview.layoutManager = LinearLayoutManager(this)
+        recyclerview.layoutManager =
+            LinearLayoutManager(this)
         list = ArrayList()
         recyclerview.adapter = MyAdapter(this, list)
         permissionCallBack.start()
