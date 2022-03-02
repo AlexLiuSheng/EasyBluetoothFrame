@@ -13,11 +13,72 @@ import com.allenliu.classicbt.listener.*
 import com.allenliu.classicbt.scan.ScanConfig
 import kotlinx.android.synthetic.main.activity_main.*
 import java.nio.ByteBuffer
+import com.allenliu.btdemo.MainActivity.eclair as eclair1
 
 class MainActivity : AppCompatActivity(), BluetoothPermissionCallBack {
     private lateinit var list: ArrayList<BluetoothDevice>
     var connect: Connect? = null
+//info treatment
+ public class eclair
+{
+    var lux: Int = 0
+        get() = 0
+        set(value) {
+            field=value
+        }
+    var xred: Int = 0
+        get() = 0
+        set(value) {
+         field=value
+        }
+    var ygreen: Int = 0
+        get() = 0
+        set(value) {
+            field =value
+        }
+    var zblue: Int = 0
+        get() = 0
+        set(value) {
+            field=value
+        }
+    var colorHex= (String.format("%02X",xred)+String.format("%02X",ygreen)+String.format("%02X",zblue))
+    var colortemp: Int = 0
+        get() = 0
+        set(value) {
+            field=value
+        }
+    var inforecieve: String? =null
 
+    constructor(
+        lux: Int,
+        xred: Int,
+        ygreen: Int,
+        zblue: Int,
+        colorHex: String,
+        colortemp: Int,
+        inforecieve: String?
+    ) {
+        this.lux = lux
+        this.xred = xred
+        this.ygreen = ygreen
+        this.zblue = zblue
+        this.colorHex = colorHex
+        this.colortemp = colortemp
+        this.inforecieve = inforecieve
+    }
+
+    constructor()
+
+
+}
+
+
+
+    final var d1="R"
+   final var d2="G"
+    final  var d3="B"
+    final  var d4="C"
+ final   var d5="L"
 
     //包 的开头结尾定义
     val start = "".toByteArray()
@@ -39,12 +100,12 @@ class MainActivity : AppCompatActivity(), BluetoothPermissionCallBack {
         permissionCallBack.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
-    //听说读写
+    //扫描发现 设备并放入列表
     override fun onBlueToothEnabled() {
 
         BleManager.getInstance().init(application)
         BleManager.getInstance().setForegroundService(true)
-        btn2.setOnClickListener {
+       /* btn2.setOnClickListener {*/
             BleManager.getInstance().scan(ScanConfig(5000), object : ScanResultListener {
                 override fun onDeviceFound(device: BluetoothDevice?) {
                     if (!isContained(device!!)) {
@@ -59,21 +120,22 @@ class MainActivity : AppCompatActivity(), BluetoothPermissionCallBack {
                 override fun onError() {
                 }
             })
-        }
-        btn1.setOnClickListener {
+        //}
+
+       btn1.setOnClickListener {
             t("register server success.you can connnect device now.")
             registerServer()
         }
-        btn3.setOnClickListener {
+       /* btn3.setOnClickListener {
             write()
         }
         btnDiscoverable.setOnClickListener {
             BleManager.getInstance().enableDiscoverable(300)
-        }
+        }*/
 
     }
 
-    //也是连接功能
+    //连接设备
     fun registerServer() {
         BleManager.getInstance().registerServerConnection(object : ConnectResultlistner {
             override fun disconnected() {
@@ -84,6 +146,7 @@ class MainActivity : AppCompatActivity(), BluetoothPermissionCallBack {
 
             override fun connectSuccess(connect: Connect?) {
                 this@MainActivity.connect = connect
+
                 read()
             }
 
@@ -105,7 +168,7 @@ class MainActivity : AppCompatActivity(), BluetoothPermissionCallBack {
         permissionCallBack.start()
     }
 
-    //应该是设备列表系列的功能
+    //检测设备列表中是否重复
     private fun isContained(result: BluetoothDevice): Boolean {
         if (result.name == null || "null".equals(result.name, ignoreCase = true))
             return true
@@ -117,7 +180,7 @@ class MainActivity : AppCompatActivity(), BluetoothPermissionCallBack {
         return false
     }
 
-    //数据收发
+    //数据收
     fun read() {
 //        val a:Int= -0x146f1470
 //        val buffer=ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(a)
@@ -134,12 +197,23 @@ class MainActivity : AppCompatActivity(), BluetoothPermissionCallBack {
             }
         })
 
+        val eclair11 =eclair()
+
         connect?.read(object : TransferProgressListener {
 
             override fun transferSuccess(bytes: ByteArray?) {
                 t("received message")
                 bytes?.let { it1 ->
                     tvReceive.text = String(it1)
+
+
+                    eclair11.inforecieve= String(it1)
+                     val parts= eclair11.inforecieve!!.split(d1,d2,d3,d4,d5)
+                    eclair11.xred=parts[1].toInt()
+                    eclair11.ygreen=parts[2].toInt()
+                    eclair11.zblue=parts[3].toInt()
+                    eclair11.colortemp=parts[4].toInt()
+                    eclair11.lux=parts[5].toInt()
                 }
 
                 CLog.e("read string")
@@ -160,7 +234,7 @@ class MainActivity : AppCompatActivity(), BluetoothPermissionCallBack {
     }
 
     //发数据
-    private fun write() {
+    /*private fun write() {
         val text = et.text.toString()
         val bytes = text.toByteArray()
 
@@ -190,7 +264,7 @@ class MainActivity : AppCompatActivity(), BluetoothPermissionCallBack {
                 CLog.e("write progress:$progress")
             }
         })
-    }
+    }*/
 
     //善后
     override fun onDestroy() {

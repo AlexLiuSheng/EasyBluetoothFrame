@@ -12,6 +12,6 @@ class WelcomeActivity : AppCompatActivity() {
 
         Handler().postDelayed({
             startActivity(Intent().setClass(this,MainActivity().javaClass))
-        }, 3500)
+        }, 4000)
     }
 }

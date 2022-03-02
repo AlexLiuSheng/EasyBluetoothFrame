@@ -13,13 +13,7 @@ import com.allenliu.classicbt.listener.ConnectResultlistner
 import com.allenliu.classicbt.listener.PinResultListener
 import java.lang.Exception
 
-/**
- * @author AllenLiu
- * @version 1.0
- * @date 2019/5/20
- * @copyRight 四川金信石信息技术有限公司
- * @since 1.0
- */
+
 class MyAdapter(var context: MainActivity, d: List<BluetoothDevice>) : RecyclerView.Adapter<MyViewHolder>() {
     var data: List<BluetoothDevice> = d
 

@@ -19,7 +19,8 @@
 
         <activity
                 android:name=".WelcomeActivity"
-                android:theme="@style/AppThemeWelcome">
+                android:theme="@style/AppThemeWelcome"
+                android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
