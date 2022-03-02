@@ -1,0 +1,45 @@
+Index: app/src/androidTest/java/com/allenliu/btdemo/ExampleInstrumentedTest.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.allenliu.btdemo\r\n\r\nimport androidx.test.platform.app.InstrumentationRegistry\r\nimport androidx.test.ext.junit.runners.AndroidJUnit4\r\n\r\nimport org.junit.Test\r\nimport org.junit.runner.RunWith\r\n\r\nimport org.junit.Assert.*\r\n\r\n/**\r\n * Instrumented test, which will execute on an Android device.\r\n *\r\n * See [testing documentation](http://d.android.com/tools/testing).\r\n */\r\n@RunWith(AndroidJUnit4::class)\r\nclass ExampleInstrumentedTest {\r\n    @Test\r\n    fun useAppContext() {\r\n        // Context of the app under test.\r\n        val appContext = InstrumentationRegistry.getTargetContext()\r\n        assertEquals(\"com.example.myapplication\", appContext.packageName)\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/androidTest/java/com/allenliu/btdemo/ExampleInstrumentedTest.kt b/app/src/androidTest/java/com/allenliu/btdemo/ExampleInstrumentedTest.kt
+--- a/app/src/androidTest/java/com/allenliu/btdemo/ExampleInstrumentedTest.kt	
++++ b/app/src/androidTest/java/com/allenliu/btdemo/ExampleInstrumentedTest.kt	
+@@ -1,5 +1,6 @@
+ package com.allenliu.btdemo
+ 
++import androidx.test.InstrumentationRegistry.getTargetContext
+ import androidx.test.platform.app.InstrumentationRegistry
+ import androidx.test.ext.junit.runners.AndroidJUnit4
+ 
+@@ -18,7 +19,7 @@
+     @Test
+     fun useAppContext() {
+         // Context of the app under test.
+-        val appContext = InstrumentationRegistry.getTargetContext()
++        val appContext = InstrumentationRegistry.getInstrumentation().getTargetContext()
+         assertEquals("com.example.myapplication", appContext.packageName)
+     }
+ }
+Index: classicbt/src/androidTest/java/com/allenliu/classicbt/ExampleInstrumentedTest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.allenliu.classicbt;\r\n\r\nimport android.content.Context;\r\nimport androidx.test.platform.app.InstrumentationRegistry;\r\nimport androidx.test.ext.junit.runners.AndroidJUnit4;\r\n\r\nimport org.junit.Test;\r\nimport org.junit.runner.RunWith;\r\n\r\nimport static org.junit.Assert.*;\r\n\r\n/**\r\n * Instrumented test, which will execute on an Android device.\r\n *\r\n * @see <a href=\"http://d.android.com/tools/testing\">Testing documentation</a>\r\n */\r\n@RunWith(AndroidJUnit4.class)\r\npublic class ExampleInstrumentedTest {\r\n    @Test\r\n    public void useAppContext() {\r\n        // Context of the app under test.\r\n        Context appContext = InstrumentationRegistry.getTargetContext();\r\n\r\n        assertEquals(\"com.allenliu.classicbt.test\", appContext.getPackageName());\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/classicbt/src/androidTest/java/com/allenliu/classicbt/ExampleInstrumentedTest.java b/classicbt/src/androidTest/java/com/allenliu/classicbt/ExampleInstrumentedTest.java
+--- a/classicbt/src/androidTest/java/com/allenliu/classicbt/ExampleInstrumentedTest.java	
++++ b/classicbt/src/androidTest/java/com/allenliu/classicbt/ExampleInstrumentedTest.java	
+@@ -19,7 +19,7 @@
+     @Test
+     public void useAppContext() {
+         // Context of the app under test.
+-        Context appContext = InstrumentationRegistry.getTargetContext();
++        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+ 
+         assertEquals("com.allenliu.classicbt.test", appContext.getPackageName());
+     }
