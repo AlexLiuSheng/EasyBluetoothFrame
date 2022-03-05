@@ -21,7 +21,7 @@
                 android:background="@drawable/button_selc"
                 android:textColor="@android:color/white"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_weight="0.8"
                 android:textSize="13sp"
                 android:layout_marginRight="10dp"
                 android:text="register as server"
@@ -86,29 +86,100 @@
     <TextView
             android:layout_width="wrap_content"
             android:text="Lux"
-            android:layout_height="wrap_content"/>
-<androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-    <LinearLayout
-            android:layout_width="match_parent"
-            android:orientation="vertical"
-            android:layout_height="match_parent">
+            android:textSize="40dp"
+            android:layout_height="wrap_content" />
     <TextView
             android:layout_width="wrap_content"
-            android:id="@+id/tvReceive"
-            android:padding="10dp"
-            android:textColor="@android:color/black"
+            android:text="   R"
+            android:textSize="40dp"
+            android:layout_height="wrap_content" />
+    <TextView
+            android:layout_width="wrap_content"
+            android:text="   G"
+            android:textSize="40dp"
+            android:layout_height="wrap_content" />
+    <TextView
+            android:layout_width="wrap_content"
+            android:text="   B"
+            android:textSize="40dp"
+            android:layout_height="wrap_content" />
+    <TextView
+            android:layout_width="wrap_content"
+            android:text="   T"
+            android:textSize="40dp"
+            android:layout_height="wrap_content" />
+    <TextView
+            android:layout_width="wrap_content"
+            android:text="#"
+            android:textSize="40dp"
+            android:layout_height="wrap_content" />
 
-            android:layout_height="wrap_content"/>
+    <androidx.core.widget.NestedScrollView
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="75dp">
 
-    <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-    </LinearLayout>
-</androidx.core.widget.NestedScrollView>
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="50dp">
+
+            <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:id="@+id/LuxReceive"
+
+                    android:textSize="40dp"
+                    android:textColor="@android:color/black"
+                    android:layout_height="wrap_content" />
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:id="@+id/RReceive"
+                    android:padding="10dp"
+                    android:textSize="40dp"
+                    android:textColor="@android:color/black"
+                    android:layout_height="wrap_content" />
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:id="@+id/GReceive"
+                    android:textSize="40dp"
+                    android:padding="10dp"
+                    android:textColor="@android:color/black"
+                    android:layout_height="wrap_content" />
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:id="@+id/BReceive"
+                    android:textSize="40dp"
+                    android:padding="10dp"
+                    android:textColor="@android:color/black"
+                    android:layout_height="wrap_content" />
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:id="@+id/CReceive"
+                    android:textSize="40dp"
+                    android:padding="10dp"
+                    android:textColor="@android:color/black"
+                    android:layout_height="wrap_content" />
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:id="@+id/CsharpReceive"
+                    android:padding="10dp"
+                    android:textSize="40dp"
+                    android:textColor="@android:color/black"
+                    android:layout_height="wrap_content" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
 
 </LinearLayout>

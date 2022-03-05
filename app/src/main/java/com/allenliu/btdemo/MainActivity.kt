@@ -18,7 +18,7 @@ import com.allenliu.btdemo.MainActivity.eclair as eclair1
 class MainActivity : AppCompatActivity(), BluetoothPermissionCallBack {
     private lateinit var list: ArrayList<BluetoothDevice>
     var connect: Connect? = null
-//info treatment
+
  public class eclair
 {
     var lux: Int = 0
@@ -71,8 +71,6 @@ class MainActivity : AppCompatActivity(), BluetoothPermissionCallBack {
 
 
 }
-
-
 
     final var d1="R"
    final var d2="G"
@@ -204,7 +202,7 @@ class MainActivity : AppCompatActivity(), BluetoothPermissionCallBack {
             override fun transferSuccess(bytes: ByteArray?) {
                 t("received message")
                 bytes?.let { it1 ->
-                    tvReceive.text = String(it1)
+
 
 
                     eclair11.inforecieve= String(it1)
@@ -214,6 +212,12 @@ class MainActivity : AppCompatActivity(), BluetoothPermissionCallBack {
                     eclair11.zblue=parts[3].toInt()
                     eclair11.colortemp=parts[4].toInt()
                     eclair11.lux=parts[5].toInt()
+                    LuxReceive.text = eclair11.lux.toString()
+                    RReceive.text=eclair11.xred.toString()
+                    GReceive.text=eclair11.ygreen.toString()
+                    BReceive.text=eclair11.zblue.toString()
+                    CReceive.text=eclair11.colortemp.toString()
+                    CsharpReceive.text=eclair11.colorHex
                 }
 
                 CLog.e("read string")
