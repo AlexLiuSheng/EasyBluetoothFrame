@@ -1,151 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<TableLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:padding="20dp"
-        android:orientation="vertical"
         android:layout_height="match_parent"
         tools:context=".MainActivity">
 
+    <TableRow>
+        <androidx.core.widget.NestedScrollView
+                android:id="@+id/scrowView"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="75dp"
+                android:layout_centerHorizontal="true">
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="50dp">
+
+                <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerview"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+    </TableRow>
+
+    <TableRow>
+          <LinearLayout
+                 android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:orientation="horizontal">
+              <TextView
+                      android:layout_width="wrap_content"
+                      android:text="Lux"
+                      android:textSize="40dp"
+                      android:layout_height="wrap_content" />
+              <TextView
+                      android:layout_width="wrap_content"
+                      android:id="@+id/LuxReceive"
+                      android:textSize="40dp"
+                      android:textColor="@android:color/black"
+                      android:layout_height="wrap_content" />
+          </LinearLayout>
+      </TableRow>
+
+    <TableRow>
     <LinearLayout
             android:layout_width="match_parent"
-            android:layout_marginBottom="5dp"
-            android:orientation="horizontal"
-            android:layout_height="wrap_content">
-
-        <Button
-                android:layout_width="wrap_content"
-                android:id="@+id/btn1"
-                android:background="@drawable/button_selc"
-                android:textColor="@android:color/white"
-                android:layout_height="match_parent"
-                android:layout_weight="0.8"
-                android:textSize="13sp"
-                android:layout_marginRight="10dp"
-                android:text="register as server"
-                android:textAllCaps="false"
-                />
-
-       <!-- <Button
-                android:layout_width="wrap_content"
-
-                android:id="@+id/btn2"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:textSize="13sp"
-
-                android:background="@drawable/button_selc"
-
-                android:textColor="@android:color/white"
-                android:text="scan"
-                android:textAllCaps="false"
-                />
-        <Button
-                android:layout_width="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:id="@+id/btnDiscoverable"
-                android:textSize="13sp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/button_selc"
-                android:textColor="@android:color/white"
-                android:text="enable discoverable"
-                android:textAllCaps="false"-->
-                />
-
-    </LinearLayout>
-
-    <!--<LinearLayout
-            android:layout_width="match_parent"
-            android:orientation="horizontal"
-            android:layout_height="wrap_content">
-
-        <EditText
-                android:layout_width="match_parent"
-                android:id="@+id/et"
-                android:hint="sendData"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"/>
-
-        <Button
-                android:layout_width="wrap_content"
-                android:id="@+id/btn3"
-                android:layout_height="wrap_content"
-                android:text="write data"
-                android:background="@drawable/button_selc"
-                android:textSize="13sp"
-
-                android:textColor="@android:color/white"
-                android:textAllCaps="false"
-                />
-    </LinearLayout>-->
-
-
-    <TextView
-            android:layout_width="wrap_content"
-            android:text="Lux"
-            android:textSize="40dp"
-            android:layout_height="wrap_content" />
-    <TextView
-            android:layout_width="wrap_content"
-            android:text="   R"
-            android:textSize="40dp"
-            android:layout_height="wrap_content" />
-    <TextView
-            android:layout_width="wrap_content"
-            android:text="   G"
-            android:textSize="40dp"
-            android:layout_height="wrap_content" />
-    <TextView
-            android:layout_width="wrap_content"
-            android:text="   B"
-            android:textSize="40dp"
-            android:layout_height="wrap_content" />
-    <TextView
-            android:layout_width="wrap_content"
-            android:text="   T"
-            android:textSize="40dp"
-            android:layout_height="wrap_content" />
-    <TextView
-            android:layout_width="wrap_content"
-            android:text="#"
-            android:textSize="40dp"
-            android:layout_height="wrap_content" />
-
-    <androidx.core.widget.NestedScrollView
-            android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="75dp">
+            android:orientation="horizontal">
+    <TextView
+            android:layout_width="wrap_content"
+            android:text="R"
+            android:textSize="40dp"
+            android:layout_height="wrap_content" />
+    <TextView
+            android:layout_width="wrap_content"
+            android:id="@+id/RReceive"
+            android:padding="10dp"
+            android:textSize="40dp"
+            android:textColor="@android:color/black"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+</TableRow>
 
+    <TableRow>
         <LinearLayout
                 android:layout_width="match_parent"
-                android:orientation="vertical"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="50dp">
-
-            <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerview"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
             <TextView
                     android:layout_width="wrap_content"
-                    android:id="@+id/LuxReceive"
-
+                    android:text="   G"
                     android:textSize="40dp"
-                    android:textColor="@android:color/black"
                     android:layout_height="wrap_content" />
-
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:id="@+id/RReceive"
-                    android:padding="10dp"
-                    android:textSize="40dp"
-                    android:textColor="@android:color/black"
-                    android:layout_height="wrap_content" />
-
             <TextView
                     android:layout_width="wrap_content"
                     android:id="@+id/GReceive"
@@ -153,7 +87,19 @@
                     android:padding="10dp"
                     android:textColor="@android:color/black"
                     android:layout_height="wrap_content" />
+        </LinearLayout>
+    </TableRow>
 
+    <TableRow>
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:text="   B"
+                    android:textSize="40dp"
+                    android:layout_height="wrap_content" />
             <TextView
                     android:layout_width="wrap_content"
                     android:id="@+id/BReceive"
@@ -161,7 +107,19 @@
                     android:padding="10dp"
                     android:textColor="@android:color/black"
                     android:layout_height="wrap_content" />
+        </LinearLayout>
+    </TableRow>
 
+    <TableRow>
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:text="   T"
+                    android:textSize="40dp"
+                    android:layout_height="wrap_content" />
             <TextView
                     android:layout_width="wrap_content"
                     android:id="@+id/CReceive"
@@ -169,7 +127,19 @@
                     android:padding="10dp"
                     android:textColor="@android:color/black"
                     android:layout_height="wrap_content" />
+        </LinearLayout>
+    </TableRow>
 
+   <!-- <TableRow>
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:text="#"
+                    android:textSize="40dp"
+                    android:layout_height="wrap_content" />
             <TextView
                     android:layout_width="wrap_content"
                     android:id="@+id/CsharpReceive"
@@ -177,9 +147,149 @@
                     android:textSize="40dp"
                     android:textColor="@android:color/black"
                     android:layout_height="wrap_content" />
-
         </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
+    </TableRow>-->
+
+  <!--  <TextView
+            android:layout_width="wrap_content"
+            android:text="Lux"
+            android:textSize="40dp"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/scrowView"/>-->
+   <!-- <TextView
+            android:layout_width="wrap_content"
+            android:text="   R"
+            android:textSize="40dp"
+            android:layout_height="wrap_content" />-->
+ <!--   <TextView
+            android:layout_width="wrap_content"
+            android:text="   G"
+            android:textSize="40dp"
+            android:layout_height="wrap_content" />-->
+    <!--<TextView
+            android:layout_width="wrap_content"
+            android:text="   B"
+            android:textSize="40dp"
+            android:layout_height="wrap_content" />-->
+  <!--  <TextView
+            android:layout_width="wrap_content"
+            android:text="   T"
+            android:textSize="40dp"
+            android:layout_height="wrap_content" />-->
+   <!-- <TextView
+            android:layout_width="wrap_content"
+            android:text="#"
+            android:textSize="40dp"
+            android:layout_height="wrap_content" />-->
+
+   <!-- <TextView
+            android:layout_width="wrap_content"
+            android:id="@+id/LuxReceive"
+            android:textSize="40dp"
+            android:textColor="@android:color/black"
+            android:layout_height="wrap_content" />-->
+    <!--<TextView
+            android:layout_width="wrap_content"
+            android:id="@+id/RReceive"
+            android:padding="10dp"
+            android:textSize="40dp"
+            android:textColor="@android:color/black"
+            android:layout_height="wrap_content" />-->
+    <!--<TextView
+            android:layout_width="wrap_content"
+            android:id="@+id/GReceive"
+            android:textSize="40dp"
+            android:padding="10dp"
+            android:textColor="@android:color/black"
+            android:layout_height="wrap_content" />-->
+    <!--<TextView
+            android:layout_width="wrap_content"
+            android:id="@+id/BReceive"
+            android:textSize="40dp"
+            android:padding="10dp"
+            android:textColor="@android:color/black"
+            android:layout_height="wrap_content" />-->
+  <!--  <TextView
+            android:layout_width="wrap_content"
+            android:id="@+id/CReceive"
+            android:textSize="40dp"
+            android:padding="10dp"
+            android:textColor="@android:color/black"
+            android:layout_height="wrap_content" />-->
+    <!--<TextView
+            android:layout_width="wrap_content"
+            android:id="@+id/CsharpReceive"
+            android:padding="10dp"
+            android:textSize="40dp"
+            android:textColor="@android:color/black"
+            android:layout_height="wrap_content" />-->
 
 
-</LinearLayout>
+
+
+    <Button
+            android:layout_width="wrap_content"
+            android:id="@+id/btn1"
+            android:background="@drawable/button_selc"
+            android:textColor="@android:color/white"
+            android:layout_height="wrap_content"
+            android:textSize="13sp"
+            android:text="register as server"
+            android:textAllCaps="false"
+            />
+
+
+</TableLayout>
+
+
+
+
+        <!-- <Button
+                       android:layout_width="wrap_content"
+
+                       android:id="@+id/btn2"
+                       android:layout_height="match_parent"
+                       android:layout_weight="1"
+                       android:textSize="13sp"
+
+                       android:background="@drawable/button_selc"
+
+                       android:textColor="@android:color/white"
+                       android:text="scan"
+                       android:textAllCaps="false"
+                       />
+               <Button
+                       android:layout_width="wrap_content"
+                       android:layout_marginLeft="10dp"
+                       android:id="@+id/btnDiscoverable"
+                       android:textSize="13sp"
+                       android:layout_height="match_parent"
+                       android:layout_weight="1"
+                       android:background="@drawable/button_selc"
+                       android:textColor="@android:color/white"
+                       android:text="enable discoverable"
+                       android:textAllCaps="false"-->
+        <!--<LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_height="wrap_content">
+
+            <EditText
+                    android:layout_width="match_parent"
+                    android:id="@+id/et"
+                    android:hint="sendData"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"/>
+
+            <Button
+                    android:layout_width="wrap_content"
+                    android:id="@+id/btn3"
+                    android:layout_height="wrap_content"
+                    android:text="write data"
+                    android:background="@drawable/button_selc"
+                    android:textSize="13sp"
+
+                    android:textColor="@android:color/white"
+                    android:textAllCaps="false"
+                    />
+        </LinearLayout>-->

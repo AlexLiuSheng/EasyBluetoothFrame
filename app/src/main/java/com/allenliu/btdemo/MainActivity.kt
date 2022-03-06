@@ -12,6 +12,7 @@ import com.allenliu.classicbt.Connect
 import com.allenliu.classicbt.listener.*
 import com.allenliu.classicbt.scan.ScanConfig
 import kotlinx.android.synthetic.main.activity_main.*
+import java.lang.Double.parseDouble
 import java.nio.ByteBuffer
 import com.allenliu.btdemo.MainActivity.eclair as eclair1
 
@@ -21,53 +22,22 @@ class MainActivity : AppCompatActivity(), BluetoothPermissionCallBack {
 
  public class eclair
 {
-    var lux: Int = 0
-        get() = 0
-        set(value) {
-            field=value
-        }
-    var xred: Int = 0
-        get() = 0
-        set(value) {
-         field=value
-        }
-    var ygreen: Int = 0
-        get() = 0
-        set(value) {
-            field =value
-        }
-    var zblue: Int = 0
-        get() = 0
-        set(value) {
-            field=value
-        }
-    var colorHex= (String.format("%02X",xred)+String.format("%02X",ygreen)+String.format("%02X",zblue))
-    var colortemp: Int = 0
-        get() = 0
-        set(value) {
-            field=value
-        }
-    var inforecieve: String? =null
+    var lux: String ?="0"
 
-    constructor(
-        lux: Int,
-        xred: Int,
-        ygreen: Int,
-        zblue: Int,
-        colorHex: String,
-        colortemp: Int,
-        inforecieve: String?
-    ) {
-        this.lux = lux
-        this.xred = xred
-        this.ygreen = ygreen
-        this.zblue = zblue
-        this.colorHex = colorHex
-        this.colortemp = colortemp
-        this.inforecieve = inforecieve
-    }
+    var xred: String ?="0"
 
-    constructor()
+    var ygreen: String ?="0"
+
+    var zblue: String ?="0"
+   /* var colorHex: String ?= (String.format("%02X",xred)+String.format("%02X",ygreen)+String.format("%02X",zblue))*/
+
+    var colortemp:String ?="0"
+
+   /* var inforecieve: String? ="0"*/
+
+
+
+
 
 
 }
@@ -77,6 +47,7 @@ class MainActivity : AppCompatActivity(), BluetoothPermissionCallBack {
     final  var d3="B"
     final  var d4="C"
  final   var d5="L"
+    final   var d6="N"
 
     //包 的开头结尾定义
     val start = "".toByteArray()
@@ -119,11 +90,11 @@ class MainActivity : AppCompatActivity(), BluetoothPermissionCallBack {
                 }
             })
         //}
-
-       btn1.setOnClickListener {
+        registerServer()
+       /*btn1.setOnClickListener {
             t("register server success.you can connnect device now.")
             registerServer()
-        }
+        }*/
        /* btn3.setOnClickListener {
             write()
         }
@@ -196,28 +167,25 @@ class MainActivity : AppCompatActivity(), BluetoothPermissionCallBack {
         })
 
         val eclair11 =eclair()
-
+var receive="0"
         connect?.read(object : TransferProgressListener {
 
             override fun transferSuccess(bytes: ByteArray?) {
                 t("received message")
                 bytes?.let { it1 ->
+                   receive= String(it1)
+             eclair11.xred=sgntreat(receive,d1,d2)
+             eclair11.ygreen=sgntreat(receive,d2,d3)
+                    eclair11.zblue=sgntreat(receive,d3,d4)
+                    eclair11.colortemp=sgntreat(receive,d4,d5)
+                    eclair11.lux=sgntreat(receive,d5,d6)
 
-
-
-                    eclair11.inforecieve= String(it1)
-                     val parts= eclair11.inforecieve!!.split(d1,d2,d3,d4,d5)
-                    eclair11.xred=parts[1].toInt()
-                    eclair11.ygreen=parts[2].toInt()
-                    eclair11.zblue=parts[3].toInt()
-                    eclair11.colortemp=parts[4].toInt()
-                    eclair11.lux=parts[5].toInt()
-                    LuxReceive.text = eclair11.lux.toString()
-                    RReceive.text=eclair11.xred.toString()
-                    GReceive.text=eclair11.ygreen.toString()
-                    BReceive.text=eclair11.zblue.toString()
-                    CReceive.text=eclair11.colortemp.toString()
-                    CsharpReceive.text=eclair11.colorHex
+                   if (eclair11.xred!="0"){ RReceive.text=eclair11.xred.toString()}
+                    if (eclair11.ygreen!="0"){  GReceive.text=eclair11.ygreen.toString()}
+                        if (eclair11.zblue!="0"){  BReceive.text=eclair11.zblue.toString()}
+                            if (eclair11.colortemp!="0"){  CReceive.text=eclair11.colortemp.toString()}
+                    if (eclair11.lux!="0"){LuxReceive.text=eclair11.lux.toString()}
+                   /* CsharpReceive.text=eclair11.colorHex*/
                 }
 
                 CLog.e("read string")
@@ -270,9 +238,51 @@ class MainActivity : AppCompatActivity(), BluetoothPermissionCallBack {
         })
     }*/
 
+    fun sgntreat(a:String ,b:String ,c:String ): String {
+       if (a==null)
+       {
+           return "0"
+       }else {
+           val parts1 = a!!.split(b, c)
+           var flag = false
+           /*isDigit(parts1[1]) == true*/
+           if (parts1.isNotEmpty()&&parts1.size>=2) {
+               if (parts1[1].length <= 5) {
+                   if (isDigit(parts1[1]) == true) {
+                       return parts1[1]
+                   } else {
+                       return "0"
+                   }
+
+               } else {
+                   return "0"
+               }
+           }else{
+               return "0"
+           }
+
+       }
+
+    }
+
+    fun isDigit(a:String): Boolean {
+        var numeric = true
+
+        try {
+            val num = parseDouble(a)
+        } catch (e: NumberFormatException) {
+            numeric = false
+        }
+return numeric
+    }
+
+
+
     //善后
     override fun onDestroy() {
         super.onDestroy()
         BleManager.getInstance().destory()
     }
+
+
 }
