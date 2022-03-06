@@ -5,6 +5,8 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.ImageView
 import android.widget.TextView
 import com.allenliu.classicbt.BleManager
 import com.allenliu.classicbt.CLog
@@ -14,9 +16,22 @@ import com.allenliu.classicbt.listener.PinResultListener
 import java.lang.Exception
 
 
-class MyAdapter(var context: MainActivity, d: List<BluetoothDevice>) : RecyclerView.Adapter<MyViewHolder>() {
+class MyAdapter(var context: MainActivity,val resourceID:Int, d: List<BluetoothDevice>) : ArrayAdapter<BluetoothDevice>(context, resourceID, d) {
     var data: List<BluetoothDevice> = d
 
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+        val deviceInfo:BluetoothDevice?=getItem(position)
+        val name=deviceInfo?.name?:""
+        val rssi = deviceInfo?.rssi ?: 0
+        val view: View = LayoutInflater.from(context).inflate(resourceID, parent, false)
+        val headImg = view.findViewById<ImageView>(R.id.iv_type)
+
+
+
+
+
+        return view
+    }
 
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): MyViewHolder {
         return MyViewHolder(LayoutInflater.from(context).inflate(R.layout.item, p0, false))
